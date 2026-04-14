@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap');
+
+:root {
+  --neon-green: #00ffcc;
+  --neon-red: #ff0055;
+  --dark-bg: #050510;
+  --glass-bg: rgba(15, 15, 30, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-primary: #e0e0ff;
+  --glow-shadow-green: 0 0 15px rgba(0, 255, 204, 0.8), 0 0 30px rgba(0, 255, 204, 0.4);
+  --glow-shadow-red: 0 0 15px rgba(255, 0, 85, 0.8), 0 0 30px rgba(255, 0, 85, 0.4);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--dark-bg);
+  background-image: radial-gradient(circle at 50% 50%, #1a1a3a 0%, #050510 100%);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 50px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a subtle scanline effect */
+.app-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.03) 51%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.app-container h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.status-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+
+.traffic-light-container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--glass-border);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+
+.traffic-light {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #222;
+  transition: all 0.5s ease-in-out;
+}
+
+.traffic-light.green {
+  background-color: var(--neon-green);
+  box-shadow: var(--glow-shadow-green);
+  animation: pulse-green 2s infinite alternate;
+}
+
+.traffic-light.red {
+  background-color: var(--neon-red);
+  box-shadow: var(--glow-shadow-red);
+  animation: pulse-red 2s infinite alternate;
+}
+
+@keyframes pulse-green {
+  0% { box-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.4); }
+  100% { box-shadow: 0 0 20px rgba(0, 255, 204, 1), 0 0 40px rgba(0, 255, 204, 0.6); }
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 10px rgba(255, 0, 85, 0.8), 0 0 20px rgba(255, 0, 85, 0.4); }
+  100% { box-shadow: 0 0 20px rgba(255, 0, 85, 1), 0 0 40px rgba(255, 0, 85, 0.6); }
+}
+
+.entry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  position: relative;
+  z-index: 11;
+}
+
+.entry-form input {
+  padding: 15px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 204, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--neon-green);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.entry-form input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.entry-form input:focus {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+
+.entry-form button {
+  padding: 15px 20px;
+  background: transparent;
+  color: var(--neon-green);
+  border: 1px solid var(--neon-green);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.entry-form button:hover {
+  background: var(--neon-green);
+  color: var(--dark-bg);
+  box-shadow: 0 0 15px var(--neon-green);
+  transform: translateY(-2px);
+}
+
+.entry-form button:active {
+  transform: translateY(0);
+}
