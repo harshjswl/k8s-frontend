@@ -4,6 +4,19 @@ import './App.css'
 function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [name, setName] = useState('');
+  const [users, setUsers] = useState([]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/users');
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch subjects', error);
+    }
+  };
 
   // Check backend status periodically
   useEffect(() => {
@@ -22,6 +35,7 @@ function App() {
 
     // Check immediately, then every 5 seconds
     checkStatus();
+    fetchUsers();
     const interval = setInterval(checkStatus, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -48,6 +62,7 @@ function App() {
         window.speechSynthesis.speak(utterance);
         
         setName(''); // Clear form
+        fetchUsers(); // Update list after submit
       } else {
         alert('Failed to submit, Neural Link Disconnected');
       }
@@ -78,6 +93,33 @@ function App() {
         />
         <button type="submit">Initialize Sync</button>
       </form>
+
+      <div className="users-list" style={{ marginTop: '30px', textAlign: 'left', width: '100%', maxWidth: '400px' }}>
+        <h2 style={{ borderBottom: '1px solid #4ade80', paddingBottom: '10px', color: '#4ade80' }}>Stored Subjects</h2>
+        {users.length === 0 ? (
+          <p style={{ color: '#aaa', fontStyle: 'italic' }}>No subjects found in the mainframe.</p>
+        ) : (
+          <ul style={{ listStyleType: 'none', padding: 0 }}>
+            {users.map((user) => (
+              <li key={user.id || user.name} style={{ 
+                padding: '12px 15px', 
+                margin: '8px 0', 
+                background: 'rgba(74, 222, 128, 0.1)', 
+                border: '1px solid rgba(74, 222, 128, 0.3)',
+                borderRadius: '6px',
+                color: '#fff',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+              }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80' }}></div>
+                <span style={{ fontWeight: '500', letterSpacing: '0.5px' }}>{user.name}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   )
 }
