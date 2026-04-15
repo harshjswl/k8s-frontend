@@ -40,6 +40,28 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!id) return;
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        const utterance = new SpeechSynthesisUtterance("Subject Terminated");
+        utterance.rate = 0.9;
+        utterance.pitch = 0.5;
+        window.speechSynthesis.speak(utterance);
+        
+        fetchUsers();
+      } else {
+        alert('Failed to terminate subject');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error occurred while deleting from mainframe');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
@@ -110,11 +132,34 @@ function App() {
                 color: '#fff',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
+                justifyContent: 'space-between',
                 boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
               }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80' }}></div>
-                <span style={{ fontWeight: '500', letterSpacing: '0.5px' }}>{user.name}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80' }}></div>
+                  <span style={{ fontWeight: '500', letterSpacing: '0.5px' }}>{user.name}</span>
+                </div>
+                {user.id && (
+                  <button 
+                    onClick={() => handleDelete(user.id)}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.2)',
+                      border: '1px solid rgba(239, 68, 68, 0.5)',
+                      color: '#ef4444',
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.4)'; e.currentTarget.style.boxShadow = '0 0 8px rgba(239, 68, 68, 0.6)'; e.currentTarget.style.color = '#fff'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.color = '#ef4444'; }}
+                  >
+                    Terminate
+                  </button>
+                )}
               </li>
             ))}
           </ul>
